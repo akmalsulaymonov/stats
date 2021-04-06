@@ -1,19 +1,23 @@
 package stats
 
-import "github.com/aki8787/bank/pkg/types"
+import "github.com/aki8787/bank/v2/pkg/types"
 
 func Avg(payment []types.Payment) types.Money {
 	sum := 0
+	k := 0
 	for _, i := range payment {
-		sum += int(i.Amount)
+		if i.Status != "FAIL" {
+			sum += int(i.Amount)
+			k ++
+		}
 	}
-	return types.Money(sum / len(payment))
+	return types.Money(sum / k)
 }
 
 func TotalInCategory(payment []types.Payment, category types.Category) types.Money {
 	sum := 0
 	for _, i := range payment {
-		if i.Category == category {
+		if i.Category == category && i.Status != "FAIL" {
 			sum += int(i.Amount)
 		}
 	}
